@@ -12,6 +12,3 @@ Selecionar(select) the contact you want to edit, edit and "salvar(save)" again, 
 <li>Gênero (Gender)</li>
 <li>Data de Cadastro (Register Date)</li>
 </ul>
-
-<img src="https://i.imgur.com/M6SnFkW.jpg">
-<img src="https://i.imgur.com/jq0A0fk.jpeg">
