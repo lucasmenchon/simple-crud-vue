@@ -74,7 +74,7 @@
                         <th>Opções</th>
                     </tr>
 
-                    <tr v-for="contact in contacts" :class="selectedId == contact.id ? classSelect : ''">
+                    <tr v-for="contact in contacts" :class="selectedId === contact.id ? classSelect : ''">
                         <td>{{contact.id}}</td>
                         <td>{{contact.name}}</td>
                         <td>{{contact.age}}</td>
