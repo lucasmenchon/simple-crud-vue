@@ -13,51 +13,56 @@
 
 <body>
 
-    <div id="app">
+    <main id="app">
 
         <div class="container">
 
             <h1>Formulário de Cadastro v.Vue</h1>
+            <div class="row">
 
-            <form class="row">
+                <form>
 
-                <div class="col-sm-2">
-                    <label>Nome:</label>
-                    <input type="text" placeholder="Nome" v-model="form.name" class="form-control">
-                </div>
+                    <div class="col-md-2">
+                        <label>Nome:</label>
+                        <input type="text" placeholder="Nome" v-model="form.name" class="form-control">
+                    </div>
 
-                <div class="col-sm-2">
-                    <label>Idade:</label>
-                    <input type="number" placeholder="Idade" v-model="form.age" class="form-control">
-                </div>
+                    <div class="col-md-2">
+                        <label>Idade:</label>
+                        <input type="number" placeholder="Idade" v-model="form.age" class="form-control">
+                    </div>
 
-                <div class="col-sm-2">
-                    <label>Telefone:</label>
-                    <input type="tel" placeholder="Telefone" v-model="form.phone" class="form-control">
-                </div>
+                    <div class="col-md-2">
+                        <label>Telefone:</label>
+                        <input type="tel" placeholder="Telefone" v-model="form.phone" class="form-control">
+                    </div>
 
-                <div class="col-sm-2">
-                    <label>Gênero:</label>
-                    <select class="form-select form-control" v-model="form.gender">
-                        <option selected>Masculino</option>
-                        <option>Feminino</option>
-                    </select>
-                </div>
+                    <div class="col-md-2">
+                        <label>Gênero:</label>
+                        <select class="form-select form-control" v-model="form.gender">
+                            <option selected>Masculino</option>
+                            <option>Feminino</option>
+                        </select>
+                    </div>
 
-                <div class="col-sm-2">
-                    <label>Data de Cadastro:</label>
-                    <input type="date" v-model="form.registerdate" class="form-control">
-                </div>
+                    <div class="col-md-2">
+                        <label>Data de Cadastro:</label>
+                        <input type="date" v-model="form.registerdate" class="form-control">
+                    </div>
 
-            </form>
+                </form>
+
+            </div>
+
             <br />
+
             <div>
                 <input type="button" value="Salvar" v-on:click="save" class="btn btn-sm btn-success" />
                 <!-- <input type="button" value="Atualizar" v-on:click="update" class="btn btn-sm btn-primary" /> -->
             </div>
             <br />
 
-            <div>
+            <div class="table-responsive">
                 <table class="table table-sm table-bordered" v-if="contacts.length > 0">
                     <tr>
                         <th>ID</th>
@@ -69,13 +74,14 @@
                         <th>Opções</th>
                     </tr>
 
-                    <tr v-for="contact in contacts">
+                    <tr v-for="contact in contacts" :class="selectedId == contact.id ? classSelect : ''">
                         <td>{{contact.id}}</td>
                         <td>{{contact.name}}</td>
                         <td>{{contact.age}}</td>
                         <td>{{contact.phone}}</td>
                         <td>{{contact.gender}}</td>
                         <td>{{contact.registerdate}}</td>
+
                         <td>
                             <input type="button" value="Excluir" class="btn btn-sm btn-danger"
                                 v-on:click="remove(contact.id)" />
@@ -84,16 +90,19 @@
                         </td>
                     </tr>
 
-                    <p :class="classAlert" role="alert" v-if="showMessage">
-                        {{messageAlert}}
-                    </p>
 
                 </table>
+
+            </div>
+            <div class="col-md-2">
+                <p :class="classAlert" role="alert" v-if="showMessage">
+                    {{messageAlert}}
+                </p>
             </div>
 
         </div>
 
-    </div>
+    </main>
 
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
@@ -103,11 +112,13 @@
             el: "#app",
             data: {
                 classAlert: '',
+                classSelect: '',
                 messageAlert: '',
                 showMessage: false,
                 inputName: '',
                 currentCount: 0,
-                currentId: 1,
+                currentId: 0,
+                selectedId: 0,
                 form: {
                     name: '',
                     age: 0,
@@ -128,12 +139,14 @@
 
                     console.log(this);
 
-
                     this.currentContact !== null ? this.update() : this.create();
 
                     this.classAlert = 'alert alert-success';
-                    this.messageAlert = "Salvo Com sucesso";
+                    this.messageAlert = "Salvo (Save)";
                     this.showMessage = true;
+                    this.selectedId = null;
+                    this.selectedId = 0;
+                    this.classSelect = '';
 
                     setTimeout(function () {
                         _this.showMessage = false
@@ -149,7 +162,6 @@
                         phone: this.form.phone,
                         gender: this.form.gender,
                         registerdate: this.form.registerdate
-
                     });
 
                     this.form.name = "";
@@ -158,7 +170,6 @@
                     this.form.gender = "Masculino";
                     this.form.registerdate = "";
                     this.currentContact = null;
-
                 },
 
                 update: function () {
@@ -167,8 +178,8 @@
                     //console.log(this.contacts);
 
                     this.contacts = this.contacts.map((contact) => {
-                        console.log(contact)
-                        if (contact.id !== this.currentContact[0].id)
+                        //console.log(contact)
+                        if (contact.id !== this.currentContact.id)
                             return contact;
 
                         return {
@@ -198,7 +209,7 @@
                     this.contacts = this.contacts.filter(p => p.id != id);
 
                     this.classAlert = 'alert alert-danger';
-                    this.messageAlert = "Excluido Com sucesso";
+                    this.messageAlert = "Excluido (Deleted)";
                     this.showMessage = true;
 
                     setTimeout(function () {
@@ -207,21 +218,21 @@
                 },
 
                 select: function (contactId) {
+
                     var _this = this;
 
-                    const contact = this.contacts.filter(contact => contact.id === contactId);
+                    const contact = this.contacts.find(contact => contact.id === contactId);
 
                     this.currentContact = contact;
+                    this.selectedId = contact.id;
 
-                    this.form.name = contact[0].name;
-                    this.form.age = contact[0].age;
-                    this.form.phone = contact[0].phone;
-                    this.form.gender = contact[0].gender;
-                    this.form.registerdate = contact[0].registerdate;
+                    this.form.name = contact.name;
+                    this.form.age = contact.age;
+                    this.form.phone = contact.phone;
+                    this.form.gender = contact.gender;
+                    this.form.registerdate = contact.registerdate;
+                    this.classSelect = 'bg-success';
                 },
-
-
-                // update/edit method??
             }
 
         });
