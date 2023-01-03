@@ -5,60 +5,51 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V VUE</title>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css"
-        integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <title>SCV - Simple Crud Vue</title>
 </head>
 
-<body>
+<body class="bg-secondary">
 
     <main id="app">
 
         <div class="container">
 
-            <h1>Formulário de Cadastro v.Vue</h1>
+            <h1 class="text-white">Registration Form</h1>
             <div class="row">
 
-                <form>
+                <div class="col-2">
+                    <label>Name:</label>
+                    <input type="text" placeholder="Name" v-model="contactForm.name" class="form-control">
+                </div>
 
-                    <div class="col-md-2">
-                        <label>Nome:</label>
-                        <input type="text" placeholder="Nome" v-model="form.name" class="form-control">
-                    </div>
+                <div class="col-2">
+                    <label>Age:</label>
+                    <input type="number" placeholder="Age" v-model="contactForm.age" class="form-control">
+                </div>
 
-                    <div class="col-md-2">
-                        <label>Idade:</label>
-                        <input type="number" placeholder="Idade" v-model="form.age" class="form-control">
-                    </div>
+                <div class="col-2">
+                    <label>Phone:</label>
+                    <input type="tel" placeholder="Phone" v-model="contactForm.phone" class="form-control">
+                </div>
 
-                    <div class="col-md-2">
-                        <label>Telefone:</label>
-                        <input type="tel" placeholder="Telefone" v-model="form.phone" class="form-control">
-                    </div>
+                <div class="col-2">
+                    <label>Gender:</label>
+                    <select class="form-select form-control" v-model="contactForm.gender">
+                        <option selected>Men</option>
+                        <option>Woman</option>
+                    </select>
+                </div>
 
-                    <div class="col-md-2">
-                        <label>Gênero:</label>
-                        <select class="form-select form-control" v-model="form.gender">
-                            <option selected>Masculino</option>
-                            <option>Feminino</option>
-                        </select>
-                    </div>
-
-                    <div class="col-md-2">
-                        <label>Data de Cadastro:</label>
-                        <input type="date" v-model="form.registerdate" class="form-control">
-                    </div>
-
-                </form>
-
+                <div class="col-2">
+                    <label>Registration Date:</label>
+                    <input type="date" v-model="contactForm.registerdate" class="form-control">
+                </div>
             </div>
 
             <br />
 
             <div>
-                <input type="button" value="Salvar" v-on:click="save" class="btn btn-sm btn-success" />
-                <!-- <input type="button" value="Atualizar" v-on:click="update" class="btn btn-sm btn-primary" /> -->
+                <input type="button" value="Save" @click="save(contactForm)" class="btn btn-sm btn-success" />
             </div>
             <br />
 
@@ -66,15 +57,15 @@
                 <table class="table table-sm table-bordered" v-if="contacts.length > 0">
                     <tr>
                         <th>ID</th>
-                        <th>Nome</th>
-                        <th>Idade</th>
-                        <th>Telefone</th>
-                        <th>Gênero</th>
-                        <th>Data de Cadastro</th>
-                        <th>Opções</th>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Phone</th>
+                        <th>Gender</th>
+                        <th>Registration Date</th>
+                        <th>Options</th>
                     </tr>
 
-                    <tr v-for="contact in contacts" :class="selectedId === contact.id ? classSelect : ''">
+                    <tr v-for="contact in contacts" :class="contact.selectedClass">
                         <td>{{contact.id}}</td>
                         <td>{{contact.name}}</td>
                         <td>{{contact.age}}</td>
@@ -83,13 +74,12 @@
                         <td>{{contact.registerdate}}</td>
 
                         <td>
-                            <input type="button" value="Excluir" class="btn btn-sm btn-danger"
-                                v-on:click="remove(contact.id)" />
-                            <input type="button" value="Selecionar" class="btn btn-sm btn-primary"
-                                v-on:click="select(contact.id)" />
+                            <input type="button" value="Delete" class="btn btn-sm btn-danger"
+                                @click="remove(contact)" />
+                            <input type="button" value="Select" class="btn btn-sm btn-primary"
+                                @click="select(contact)" />
                         </td>
                     </tr>
-
 
                 </table>
 
@@ -104,6 +94,14 @@
 
     </main>
 
+    <!-- CSS only-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+        crossorigin="anonymous"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 
@@ -112,41 +110,48 @@
             el: "#app",
             data: {
                 classAlert: '',
-                classSelect: '',
                 messageAlert: '',
                 showMessage: false,
-                inputName: '',
-                currentCount: 0,
-                currentId: 0,
-                selectedId: 0,
-                form: {
+                contactForm: {
+                    id: 1,
                     name: '',
                     age: 0,
                     phone: '',
-                    gender: 'Masculino',
-                    registerdate: ''
+                    gender: 'Man',
+                    registerdate: '',
+                    selected: false,
+                    selectedClass: '',
                 },
+                currentContact: {},
                 contacts: [],
-                currentContact: null,
+            },
+            watch: {
+                
             },
             methods: {
-                incrementCount: function () {
-                    this.currentCount++;
-                },
 
-                save: function () {
-                    var _this = this;
+                save: function (objContact) {
 
-                    console.log(this);
+                    let _this = this
 
-                    this.currentContact !== null ? this.update() : this.create();
+                    let contact = this.contacts.find(contact => contact.selected == true)
 
+                    if (contact != undefined) {
+                        this.update(contact)
+                    }
+                    else {
+                        this.createContact()
+                    }
+
+                    this.contactForm.name = ''
+                    this.contactForm.age = 0
+                    this.contactForm.phone = ''
+                    this.contactForm.gender = 'Man'
+                    this.contactForm.registerdate = ''
+                    objContact.selectedClass = ''
                     this.classAlert = 'alert alert-success';
-                    this.messageAlert = "Salvo (Save)";
-                    this.showMessage = true;
-                    this.selectedId = null;
-                    this.selectedId = 0;
-                    this.classSelect = '';
+                    this.messageAlert = "Save"
+                    this.showMessage = true
 
                     setTimeout(function () {
                         _this.showMessage = false
@@ -154,84 +159,63 @@
 
                 },
 
-                create: function () {
+                createContact: function () {
+
                     this.contacts.push({
-                        id: this.currentId++,
-                        name: this.form.name,
-                        age: this.form.age,
-                        phone: this.form.phone,
-                        gender: this.form.gender,
-                        registerdate: this.form.registerdate
+                        id: this.contactForm.id++,
+                        name: this.contactForm.name,
+                        age: this.contactForm.age,
+                        phone: this.contactForm.phone,
+                        gender: this.contactForm.gender,
+                        registerdate: this.contactForm.registerdate,
+                        selectedClass: '',
+                        selectedDate: false,
                     });
-
-                    this.form.name = "";
-                    this.form.age = 0;
-                    this.form.phone = "";
-                    this.form.gender = "Masculino";
-                    this.form.registerdate = "";
-                    this.currentContact = null;
                 },
 
-                update: function () {
-                    var _this = this;
+                update: function (objContact) {
 
-                    //console.log(this.contacts);
-
-                    this.contacts = this.contacts.map((contact) => {
-                        //console.log(contact)
-                        if (contact.id !== this.currentContact.id)
-                            return contact;
-
-                        return {
-                            ...contact,
-                            name: this.form.name,
-                            age: this.form.age,
-                            phone: this.form.phone,
-                            gender: this.form.gender,
-                            registerdate: this.form.registerdate
-                        }
-                    })
-
-                    this.form.name = "";
-                    this.form.age = 0;
-                    this.form.phone = "";
-                    this.form.gender = "Masculino";
-                    this.form.registerdate = "";
-                    this.currentContact = null;
-
-                    console.log(this.contacts);
-
+                    objContact.name = app.contactForm.name
+                    objContact.age = app.contactForm.age
+                    objContact.phone = app.contactForm.phone
+                    objContact.gender = app.contactForm.gender
+                    objContact.registerdate = app.contactForm.registerdate
+                    objContact.selectedClass = ''
+                    objContact.selected = false
                 },
 
-                remove: function (id) {
-                    var _this = this;
+                remove: function (objContact) {
+                    
+                    let _this = this
 
-                    this.contacts = this.contacts.filter(p => p.id != id);
+                    this.contacts = this.contacts.filter(contact => contact.id != objContact.id)
 
-                    this.classAlert = 'alert alert-danger';
-                    this.messageAlert = "Excluido (Deleted)";
+                    this.classAlert = 'alert alert-danger'
+                    this.messageAlert = "Deleted"
                     this.showMessage = true;
 
                     setTimeout(function () {
                         _this.showMessage = false
-                    }, 3000);
+                    }, 3000)
                 },
 
-                select: function (contactId) {
+                select: function (objContact) {
 
-                    var _this = this;
+                    for (var contact of this.contacts) {
+                        if (contact.id != objContact.id) {
+                            contact.selectedClass = ''
+                            contact.selected = false                            
+                        }
+                    }
 
-                    const contact = this.contacts.find(contact => contact.id === contactId);
+                    this.contactForm.name = objContact.name
+                    this.contactForm.age = objContact.age
+                    this.contactForm.phone = objContact.phone
+                    this.contactForm.gender = objContact.gender
+                    this.contactForm.registerdate = objContact.registerdate
+                    objContact.selected = true
+                    objContact.selectedClass = 'bg-success'
 
-                    this.currentContact = contact;
-                    this.selectedId = contact.id;
-
-                    this.form.name = contact.name;
-                    this.form.age = contact.age;
-                    this.form.phone = contact.phone;
-                    this.form.gender = contact.gender;
-                    this.form.registerdate = contact.registerdate;
-                    this.classSelect = 'bg-success';
                 },
             }
 
