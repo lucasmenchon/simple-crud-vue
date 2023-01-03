@@ -155,7 +155,7 @@
 
                     setTimeout(function () {
                         _this.showMessage = false
-                    }, 3000);
+                    }, 2000);
 
                 },
 
@@ -175,11 +175,11 @@
 
                 update: function (objContact) {
 
-                    objContact.name = app.contactForm.name
-                    objContact.age = app.contactForm.age
-                    objContact.phone = app.contactForm.phone
-                    objContact.gender = app.contactForm.gender
-                    objContact.registerdate = app.contactForm.registerdate
+                    objContact.name = this.contactForm.name
+                    objContact.age = this.contactForm.age
+                    objContact.phone = this.contactForm.phone
+                    objContact.gender = this.contactForm.gender
+                    objContact.registerdate = this.contactForm.registerdate
                     objContact.selectedClass = ''
                     objContact.selected = false
                 },
@@ -196,7 +196,7 @@
 
                     setTimeout(function () {
                         _this.showMessage = false
-                    }, 3000)
+                    }, 2000)
                 },
 
                 select: function (objContact) {
@@ -213,12 +213,11 @@
                     this.contactForm.phone = objContact.phone
                     this.contactForm.gender = objContact.gender
                     this.contactForm.registerdate = objContact.registerdate
+
                     objContact.selected = true
                     objContact.selectedClass = 'bg-success'
-
                 },
             }
-
         });
 
     </script>
