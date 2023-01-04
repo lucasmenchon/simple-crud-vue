@@ -122,41 +122,28 @@
                     selected: false,
                     selectedClass: '',
                 },
-                currentContact: {},
+                messageType: {
+                    success: 'alert alert-success',
+                    danger: 'alert alert-danger',
+                },
                 contacts: [],
             },
             watch: {
-                
+
             },
             methods: {
 
                 save: function (objContact) {
-
-                    let _this = this
-
+                    
                     let contact = this.contacts.find(contact => contact.selected == true)
-
-                    if (contact != undefined) {
+                   
+                    if (contact != undefined) 
                         this.update(contact)
-                    }
-                    else {
+                    else 
                         this.createContact()
-                    }
 
-                    this.contactForm.name = ''
-                    this.contactForm.age = 0
-                    this.contactForm.phone = ''
-                    this.contactForm.gender = 'Man'
-                    this.contactForm.registerdate = ''
-                    objContact.selectedClass = ''
-                    this.classAlert = 'alert alert-success';
-                    this.messageAlert = "Save"
-                    this.showMessage = true
-
-                    setTimeout(function () {
-                        _this.showMessage = false
-                    }, 2000);
-
+                    this.showMessageBox(this.messageType.success, 'Save!');
+                    this.cleanForm();
                 },
 
                 createContact: function () {
@@ -185,28 +172,14 @@
                 },
 
                 remove: function (objContact) {
-                    
-                    let _this = this
 
                     this.contacts = this.contacts.filter(contact => contact.id != objContact.id)
-
-                    this.classAlert = 'alert alert-danger'
-                    this.messageAlert = "Deleted"
-                    this.showMessage = true;
-
-                    setTimeout(function () {
-                        _this.showMessage = false
-                    }, 2000)
+                    this.showMessageBox(this.messageType.danger, 'Deleted!')
                 },
 
                 select: function (objContact) {
 
-                    for (var contact of this.contacts) {
-                        if (contact.id != objContact.id) {
-                            contact.selectedClass = ''
-                            contact.selected = false                            
-                        }
-                    }
+                    this.unselectContacts();
 
                     this.contactForm.name = objContact.name
                     this.contactForm.age = objContact.age
@@ -216,6 +189,38 @@
 
                     objContact.selected = true
                     objContact.selectedClass = 'bg-success'
+                },
+
+                showMessageBox: function (messageType, textMessageAlert) {
+
+                    this.classAlert = messageType
+                    this.messageAlert = textMessageAlert
+                    this.showMessage = true;
+
+                    this.hideMessageBox();
+                },
+
+                hideMessageBox: function () {
+
+                    var _this = this
+
+                    setTimeout(function () {
+                        _this.showMessage = false
+                    }, 2000)
+                },
+
+                cleanForm: function () {
+
+                    this.contactForm.name = ''
+                    this.contactForm.age = 0
+                    this.contactForm.phone = ''
+                    this.contactForm.gender = 'Man'
+                    this.contactForm.registerdate = ''
+                    objContact.selectedClass = ''
+                },
+
+                unselectContacts: function () {
+                    this.contacts.forEach(contact => { contact.selected = false; contact.selectedClass = '' });
                 },
             }
         });
