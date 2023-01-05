@@ -85,8 +85,8 @@
 
             </div>
             <div class="col-md-2">
-                <p :class="classAlert" role="alert" v-if="showMessage">
-                    {{messageAlert}}
+                <p :class="alertMessage.alertClass" role="alert" v-if="alertMessage.showMessage">
+                    {{alertMessage.message}}
                 </p>
             </div>
 
@@ -109,9 +109,8 @@
         var app = new Vue({
             el: "#app",
             data: {
-                classAlert: '',
-                messageAlert: '',
-                showMessage: false,
+
+                contacts: [],
                 contactForm: {
                     id: 1,
                     name: '',
@@ -122,11 +121,13 @@
                     selected: false,
                     selectedClass: '',
                 },
-                messageType: {
-                    success: 'alert alert-success',
-                    danger: 'alert alert-danger',
+                alertMessage: {
+                    message: '',
+                    alertClass: '',
+                    successClass: 'alert alert-success',
+                    dangerClass: 'alert alert-danger',
+                    showMessage: false,
                 },
-                contacts: [],
             },
             watch: {
 
@@ -134,15 +135,15 @@
             methods: {
 
                 save: function (objContact) {
-                    
+
                     let contact = this.contacts.find(contact => contact.selected == true)
-                   
-                    if (contact != undefined) 
+
+                    if (contact != undefined)
                         this.update(contact)
-                    else 
+                    else
                         this.createContact()
 
-                    this.showMessageBox(this.messageType.success, 'Save!');
+                    this.showMessageBox(this.alertMessage.successClass, 'Save!');
                     this.cleanForm();
                 },
 
@@ -156,7 +157,7 @@
                         gender: this.contactForm.gender,
                         registerdate: this.contactForm.registerdate,
                         selectedClass: '',
-                        selectedDate: false,
+                        selected: false,
                     });
                 },
 
@@ -174,7 +175,7 @@
                 remove: function (objContact) {
 
                     this.contacts = this.contacts.filter(contact => contact.id != objContact.id)
-                    this.showMessageBox(this.messageType.danger, 'Deleted!')
+                    this.showMessageBox(this.alertMessage.dangerClass, 'Deleted!')
                 },
 
                 select: function (objContact) {
@@ -191,11 +192,15 @@
                     objContact.selectedClass = 'bg-success'
                 },
 
-                showMessageBox: function (messageType, textMessageAlert) {
+                removeSelect: function () {
+                    this.contacts.forEach(contact => { contact.selected = false; contact.selectedClass = '' });
+                },
 
-                    this.classAlert = messageType
-                    this.messageAlert = textMessageAlert
-                    this.showMessage = true;
+                showMessageBox: function (classType, textMessageAlert) {
+
+                    this.alertMessage.alertClass = classType
+                    this.alertMessage.message = textMessageAlert
+                    this.alertMessage.showMessage = true;
 
                     this.hideMessageBox();
                 },
@@ -205,7 +210,7 @@
                     var _this = this
 
                     setTimeout(function () {
-                        _this.showMessage = false
+                        _this.alertMessage.showMessage = false
                     }, 2000)
                 },
 
@@ -216,11 +221,6 @@
                     this.contactForm.phone = ''
                     this.contactForm.gender = 'Man'
                     this.contactForm.registerdate = ''
-                    objContact.selectedClass = ''
-                },
-
-                removeSelect: function () {
-                    this.contacts.forEach(contact => { contact.selected = false; contact.selectedClass = '' });
                 },
             }
         });
