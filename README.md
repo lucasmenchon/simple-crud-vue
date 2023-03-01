@@ -1,5 +1,5 @@
 
-A simple crud system with Vue, html and bootstrap. Access project <a href="https://lucasmenchon.github.io/simple-crud-vue/" target="_blank">click here</a>.
+Simple crud system with Vue, html and bootstrap. Access project <a href="https://lucasmenchon.github.io/simple-crud-vue/" target="_blank">here</a>.
 
 <p>I made this simple crud system for registering contacts with Vue. <br />
 You can register by filling out the form and clicking save. <br />
