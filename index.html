@@ -8,102 +8,6 @@
     <title>SCV - Simple Crud Vue</title>
 </head>
 
-<!-- <body class="bg-secondary">
-
-    <main id="app">
-
-        <div class="container py-5">
-
-            <h1 class="text-white mb-5">Contacts List</h1>
-
-            <form>
-                <div class="row">
-
-                    <div class="col-lg-4 mb-3">
-                        <label class="form-label" title="Enter the name of the contact">Name:</label>
-                        <input type="text" placeholder="Name" v-model="contactForm.name" class="form-control" required>
-                    </div>
-
-                    <div class="col-lg-4 mb-3">
-                        <label class="form-label" title="Enter the age of the contact">Age:</label>
-                        <input type="number" placeholder="Age" v-model="contactForm.age" class="form-control">
-                    </div>
-
-                    <div class="col-lg-4 mb-3">
-                        <label class="form-label" title="Enter the phone number of the contact">Phone:</label>
-                        <input type="tel" placeholder="Phone" v-model="contactForm.phone" class="form-control" required>
-                    </div>
-
-                    <div class="col-lg-4 mb-3">
-                        <label class="form-label" title="Select the gender of the contact">Gender:</label>
-                        <select class="form-select form-control" v-model="contactForm.gender">
-                            <option selected>Men</option>
-                            <option>Woman</option>
-                        </select>
-                    </div>
-
-                    <div class="col-lg-4 mb-3">
-                        <label class="form-label" title="Select the registration date of the contact">Registration
-                            Date:</label>
-                        <input type="date" v-model="contactForm.registerdate" class="form-control">
-                    </div>
-
-                </div>
-
-                <div class="mt-4">
-                    <button type="button" class="btn btn-success me-3" @click="save(contactForm)"
-                        :disabled="!isValidForm">Save</button>
-                    <button type="button" class="btn btn-secondary" @click="clearForm">Clear</button>
-                </div>
-
-            </form>
-
-            <div class="table-responsive mt-5">
-                <table class="table table-striped table-hover">
-
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Age</th>
-                            <th>Phone</th>
-                            <th>Gender</th>
-                            <th>Registration Date</th>
-                            <th>Options</th>
-                        </tr>
-                    </thead>
-
-                    <tbody v-if="contacts.length > 0">
-
-                        <tr v-for="contact in contacts" :class="contact.selectedClass">
-                            <td>{{contact.id}}</td>
-                            <td>{{contact.name}}</td>
-                            <td>{{contact.age}}</td>
-                            <td>{{contact.phone}}</td>
-                            <td>{{contact.gender}}</td>
-                            <td>{{contact.registerdate}}</td>
-                            <td>
-                                <button type="button" class="btn btn-sm btn-danger me-2"
-                                    @click="remove(contact)">Delete</button>
-                                <button type="button" class="btn btn-sm btn-primary"
-                                    @click="select(contact)">Select</button>
-                            </td>
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
-                <p :class="alertMessage.alertClass" role="alert" v-if="alertMessage.showMessage">
-                    {{alertMessage.message}}
-                </p>
-
-            </div>
-
-        </div>
-
-    </main> -->
-
 <body class="bg-light">
     <main id="app" class="container py-5">
         <h1 class="text-center text-primary mb-5">Contacts List</h1>
@@ -111,7 +15,7 @@
         <form class="mb-5">
             <div class="row g-3">
                 <div class="col-md-4">
-                    <label for="name-input" class="form-label">Name</label>
+                    <label for="name-input" class="form-label">Name*</label>
                     <input type="text" class="form-control" id="name-input" placeholder="Enter name"
                         v-model="contactForm.name" required>
                 </div>
@@ -121,9 +25,9 @@
                         v-model="contactForm.age">
                 </div>
                 <div class="col-md-4">
-                    <label for="phone-input" class="form-label">Phone</label>
+                    <label for="phone-input" class="form-label">Phone*</label>
                     <input type="tel" class="form-control" id="phone-input" placeholder="Enter phone number"
-                        v-model="contactForm.phone" required>
+                        v-model="contactForm.phone" v-mask="'(##) #####-####'" required>
                 </div>
                 <div class="col-md-4">
                     <label for="gender-select" class="form-label">Gender</label>
@@ -134,7 +38,8 @@
                 </div>
                 <div class="col-md-4">
                     <label for="date-input" class="form-label">Registration Date</label>
-                    <input type="date" class="form-control" id="date-input" v-model="contactForm.registerdate">
+                    <input class="form-control" id="date-input" v-model="contactForm.registerdate"
+                        v-mask="'##/##/####'">
                 </div>
             </div>
 
@@ -149,7 +54,7 @@
             <table class="table table-striped table-hover">
                 <thead>
                     <tr class="table-primary">
-                        
+
                         <th scope="col">Name</th>
                         <th scope="col">Age</th>
                         <th scope="col">Phone</th>
@@ -160,7 +65,7 @@
                 </thead>
                 <tbody v-if="contacts.length > 0">
                     <tr v-for="contact in contacts" :class="contact.selectedClass">
-                        
+
                         <td>{{ contact.name }}</td>
                         <td>{{ contact.age }}</td>
                         <td>{{ contact.phone }}</td>
@@ -181,7 +86,7 @@
         </p>
     </main>
 
-    <!-- CSS only-->
+    <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 
@@ -189,14 +94,14 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
         crossorigin="anonymous"></script>
-
+    <!-- Vue -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/vue-the-mask/dist/vue-the-mask.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuelidate@0.7.7/dist/validators.min.js"></script>
     <script>
         var app = new Vue({
             el: "#app",
             data: {
-
                 contacts: [],
                 contactForm: {
                     id: 1,
@@ -216,10 +121,11 @@
                     showMessage: false,
                 },
             },
+
             computed: {
                 isValidPhone() {
-                    // This regex checks if the phone number has 10 digits
-                    let phoneRegex = /^(?!.*(\d)\1{2})\d{11}$/; // /^[0-9]{10}$/;
+                    // This regex checks if the phone number has 11 digits
+                    let phoneRegex = /^\(\d{2}\) \d{5}-\d{4}$/; // /^[0-9]{10}$/;
                     return phoneRegex.test(this.contactForm.phone);
                 },
                 isValidName() {
@@ -275,7 +181,6 @@
                     objContact.selectedClass = '';
                 },
 
-
                 remove: function (objContact) {
 
                     this.contacts = this.contacts.filter(contact => contact.id != objContact.id)
@@ -323,12 +228,9 @@
                 },
 
                 hideMessageBox: function () {
-
-                    var _this = this
-
-                    setTimeout(function () {
-                        _this.alertMessage.showMessage = false
-                    }, 2000)
+                    setTimeout(() => {
+                        this.alertMessage.showMessage = false;
+                    }, 2000);
                 },
 
                 cleanForm: function () {
@@ -341,7 +243,6 @@
                 },
             }
         });
-
     </script>
 
 </body>
