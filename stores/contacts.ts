@@ -1,7 +1,11 @@
 import { defineStore } from 'pinia'
-import type { Contact, ContactFormData, SortConfig, SortField, SortDirection } from '~/types'
+import type { Contact, ContactFormData, SortConfig, SortField } from '~/types'
 
-const STORAGE_KEY = 'scv-contacts'
+const STORAGE_KEY = 'scv-contacts-v3'
+
+function uid(): string {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
+}
 
 export const useContactsStore = defineStore('contacts', () => {
   const contacts = ref<Contact[]>([])
@@ -10,144 +14,87 @@ export const useContactsStore = defineStore('contacts', () => {
   const filterCategory = ref<string>('')
   const filterFavorites = ref(false)
   const sortConfig = ref<SortConfig>({ field: 'name', direction: 'asc' })
-  const editingId = ref<number | null>(null)
-  const nextId = ref(1)
+  const editingId = ref<string | null>(null)
 
-  // Load from localStorage
   function loadContacts() {
-    if (import.meta.client) {
-      const stored = localStorage.getItem(STORAGE_KEY)
-      if (stored) {
-        try {
-          const data = JSON.parse(stored)
-          contacts.value = data.contacts || []
-          nextId.value = data.nextId || 1
-        } catch {
-          contacts.value = []
-        }
-      }
-    }
+    if (!import.meta.client) return
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY)
+      if (raw) contacts.value = JSON.parse(raw) ?? []
+    } catch { /* ignore corrupt data */ }
   }
 
-  // Save to localStorage
-  function saveContacts() {
-    if (import.meta.client) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        contacts: contacts.value,
-        nextId: nextId.value,
-      }))
-    }
+  function persist() {
+    if (import.meta.client) localStorage.setItem(STORAGE_KEY, JSON.stringify(contacts.value))
   }
 
-  // Filtered and sorted contacts
   const filteredContacts = computed(() => {
     let result = [...contacts.value]
-
-    // Search
     if (searchQuery.value) {
-      const query = searchQuery.value.toLowerCase()
+      const q = searchQuery.value.toLowerCase()
       result = result.filter(c =>
-        c.name.toLowerCase().includes(query) ||
-        c.email.toLowerCase().includes(query) ||
-        c.phone.includes(query) ||
-        c.notes.toLowerCase().includes(query)
+        c.name.toLowerCase().includes(q) ||
+        c.email.toLowerCase().includes(q) ||
+        c.phone.includes(q) ||
+        c.notes.toLowerCase().includes(q) ||
+        c.category.toLowerCase().includes(q),
       )
     }
+    if (filterGender.value) result = result.filter(c => c.gender === filterGender.value)
+    if (filterCategory.value) result = result.filter(c => c.category === filterCategory.value)
+    if (filterFavorites.value) result = result.filter(c => c.favorite)
 
-    // Filter by gender
-    if (filterGender.value) {
-      result = result.filter(c => c.gender === filterGender.value)
-    }
-
-    // Filter by category
-    if (filterCategory.value) {
-      result = result.filter(c => c.category === filterCategory.value)
-    }
-
-    // Filter favorites
-    if (filterFavorites.value) {
-      result = result.filter(c => c.favorite)
-    }
-
-    // Sort
     const { field, direction } = sortConfig.value
     result.sort((a, b) => {
-      let valA = a[field] ?? ''
-      let valB = b[field] ?? ''
-
-      if (typeof valA === 'string') valA = valA.toLowerCase()
-      if (typeof valB === 'string') valB = valB.toLowerCase()
-
-      if (valA < valB) return direction === 'asc' ? -1 : 1
-      if (valA > valB) return direction === 'asc' ? 1 : -1
+      let va: string | number = a[field] ?? ''
+      let vb: string | number = b[field] ?? ''
+      if (typeof va === 'string') va = va.toLowerCase()
+      if (typeof vb === 'string') vb = vb.toLowerCase()
+      if (va < vb) return direction === 'asc' ? -1 : 1
+      if (va > vb) return direction === 'asc' ? 1 : -1
       return 0
     })
-
     return result
   })
 
   const totalContacts = computed(() => contacts.value.length)
   const favoriteCount = computed(() => contacts.value.filter(c => c.favorite).length)
   const hasActiveFilters = computed(() =>
-    !!searchQuery.value || !!filterGender.value || !!filterCategory.value || filterFavorites.value
+    !!searchQuery.value || !!filterGender.value || !!filterCategory.value || filterFavorites.value,
   )
 
   const stats = computed(() => {
-    const genderCounts: Record<string, number> = {}
-    const categoryCounts: Record<string, number> = {}
     let totalAge = 0
     let ageCount = 0
-
-    contacts.value.forEach(c => {
-      if (c.gender) genderCounts[c.gender] = (genderCounts[c.gender] || 0) + 1
-      if (c.category) categoryCounts[c.category] = (categoryCounts[c.category] || 0) + 1
-      if (c.age) { totalAge += c.age; ageCount++ }
-    })
-
+    contacts.value.forEach(c => { if (c.age) { totalAge += c.age; ageCount++ } })
     return {
       total: contacts.value.length,
       favorites: favoriteCount.value,
       avgAge: ageCount > 0 ? Math.round(totalAge / ageCount) : 0,
-      genderCounts,
-      categoryCounts,
     }
   })
 
-  function addContact(formData: ContactFormData) {
-    const contact: Contact = {
-      ...formData,
-      id: nextId.value++,
-      favorite: false,
-    }
-    contacts.value.push(contact)
-    saveContacts()
-    return contact
+  function addContact(data: ContactFormData) {
+    contacts.value.push({ ...data, id: uid(), favorite: false })
+    persist()
   }
 
-  function updateContact(id: number, formData: ContactFormData) {
-    const index = contacts.value.findIndex(c => c.id === id)
-    if (index !== -1) {
-      contacts.value[index] = {
-        ...contacts.value[index],
-        ...formData,
-      }
-      saveContacts()
-    }
+  function updateContact(id: string, data: ContactFormData) {
+    const idx = contacts.value.findIndex(c => c.id === id)
+    if (idx !== -1) contacts.value[idx] = { ...contacts.value[idx], ...data }
     editingId.value = null
+    persist()
   }
 
-  function removeContact(id: number) {
+  function removeContact(id: string) {
     contacts.value = contacts.value.filter(c => c.id !== id)
     if (editingId.value === id) editingId.value = null
-    saveContacts()
+    persist()
   }
 
-  function toggleFavorite(id: number) {
-    const contact = contacts.value.find(c => c.id === id)
-    if (contact) {
-      contact.favorite = !contact.favorite
-      saveContacts()
-    }
+  function toggleFavorite(id: string) {
+    const c = contacts.value.find(ct => ct.id === id)
+    if (c) { c.favorite = !c.favorite; persist() }
   }
 
   function setSort(field: SortField) {
@@ -165,70 +112,47 @@ export const useContactsStore = defineStore('contacts', () => {
     filterFavorites.value = false
   }
 
-  function startEditing(id: number) {
-    editingId.value = id
-  }
-
-  function cancelEditing() {
-    editingId.value = null
-  }
-
-  function getContact(id: number) {
-    return contacts.value.find(c => c.id === id)
-  }
+  function startEditing(id: string) { editingId.value = id }
+  function cancelEditing() { editingId.value = null }
+  function getContact(id: string) { return contacts.value.find(c => c.id === id) }
 
   function exportContacts(): string {
     return JSON.stringify(contacts.value, null, 2)
   }
 
-  function importContacts(jsonString: string): boolean {
+  function importContacts(json: string): boolean {
     try {
-      const imported = JSON.parse(jsonString)
-      if (!Array.isArray(imported)) return false
-      const maxId = imported.reduce((max: number, c: Contact) => Math.max(max, c.id || 0), nextId.value)
-      nextId.value = maxId + 1
-      contacts.value = [...contacts.value, ...imported.map((c: Contact) => ({
-        ...c,
-        id: c.id || nextId.value++,
-      }))]
-      saveContacts()
+      const arr = JSON.parse(json)
+      if (!Array.isArray(arr)) return false
+      const imported: Contact[] = arr.map((c: Partial<Contact>) => ({
+        id: uid(),
+        name: c.name ?? '',
+        email: c.email ?? '',
+        age: c.age ?? null,
+        phone: c.phone ?? '',
+        gender: c.gender ?? '',
+        category: c.category ?? '',
+        registerDate: c.registerDate ?? new Date().toISOString().split('T')[0],
+        favorite: c.favorite ?? false,
+        notes: c.notes ?? '',
+      }))
+      contacts.value.push(...imported)
+      persist()
       return true
-    } catch {
-      return false
-    }
+    } catch { return false }
   }
 
   function clearAllContacts() {
     contacts.value = []
     editingId.value = null
-    saveContacts()
+    persist()
   }
 
   return {
-    contacts,
-    searchQuery,
-    filterGender,
-    filterCategory,
-    filterFavorites,
-    sortConfig,
-    editingId,
-    filteredContacts,
-    totalContacts,
-    favoriteCount,
-    hasActiveFilters,
-    stats,
-    loadContacts,
-    addContact,
-    updateContact,
-    removeContact,
-    toggleFavorite,
-    setSort,
-    clearFilters,
-    startEditing,
-    cancelEditing,
-    getContact,
-    exportContacts,
-    importContacts,
-    clearAllContacts,
+    contacts, searchQuery, filterGender, filterCategory, filterFavorites,
+    sortConfig, editingId, filteredContacts, totalContacts, favoriteCount,
+    hasActiveFilters, stats, loadContacts, addContact, updateContact,
+    removeContact, toggleFavorite, setSort, clearFilters, startEditing,
+    cancelEditing, getContact, exportContacts, importContacts, clearAllContacts,
   }
 })

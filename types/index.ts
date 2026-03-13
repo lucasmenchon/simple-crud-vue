@@ -1,5 +1,5 @@
 export interface Contact {
-  id: number
+  id: string
   name: string
   email: string
   age: number | null
@@ -11,7 +11,7 @@ export interface Contact {
   notes: string
 }
 
-export type ContactFormData = Omit<Contact, 'id' | 'favorite'>;
+export type ContactFormData = Omit<Contact, 'id' | 'favorite'>
 
 export type SortField = 'name' | 'email' | 'age' | 'phone' | 'registerDate' | 'category'
 export type SortDirection = 'asc' | 'desc'
@@ -26,8 +26,8 @@ export type ViewMode = 'table' | 'grid'
 export type ToastType = 'success' | 'error' | 'info' | 'warning'
 
 export interface Toast {
-  id: number
+  id: string
   message: string
   type: ToastType
-  duration?: number
+  duration: number
 }

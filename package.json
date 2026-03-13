@@ -1,8 +1,8 @@
 {
-  "name": "simple-crud-vue-modern",
-  "version": "2.0.0",
+  "name": "simple-crud-vue",
+  "version": "3.0.0",
   "private": true,
-  "description": "Modern Contacts CRUD - Built with Nuxt 3, Vue 3, and Tailwind CSS",
+  "description": "Modern Contacts CRUD — Nuxt 4, Vue 3, Tailwind CSS 4, Pinia",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
@@ -11,16 +11,18 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "nuxt": "^3.16.0",
+    "nuxt": "^4.4.0",
     "vue": "^3.5.0",
     "vue-router": "^4.5.0",
-    "@pinia/nuxt": "^0.10.0",
-    "pinia": "^3.0.0"
+    "pinia": "^3.0.0",
+    "@pinia/nuxt": "^0.11.0"
   },
   "devDependencies": {
-    "@nuxtjs/tailwindcss": "^6.13.0",
-    "@nuxtjs/color-mode": "^3.5.0",
-    "@nuxt/icon": "^1.12.0",
+    "@tailwindcss/vite": "^4.2.0",
+    "tailwindcss": "^4.2.0",
+    "@nuxtjs/color-mode": "^4.0.0",
+    "@nuxt/icon": "^2.2.0",
+    "@nuxt/fonts": "^0.14.0",
     "typescript": "^5.8.0"
   }
 }

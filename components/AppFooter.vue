@@ -1,14 +1,14 @@
 <template>
-  <footer class="border-t border-gray-200 dark:border-gray-800 py-6 mt-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <p class="text-sm text-gray-500 dark:text-gray-400">
-        Built with <span class="text-red-500">&#10084;</span> using
-        <span class="font-semibold text-primary-600">Nuxt 3</span>,
-        <span class="font-semibold text-emerald-600">Vue 3</span> &amp;
-        <span class="font-semibold text-sky-600">Tailwind CSS</span>
+  <footer class="mt-16 border-t border-surface-200/60 dark:border-surface-800/60 py-8">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+      <p class="text-sm text-surface-400 dark:text-surface-500">
+        Built with
+        <span class="font-semibold text-gradient">Nuxt 4</span>,
+        <span class="font-semibold text-emerald-500">Vue 3</span> &amp;
+        <span class="font-semibold text-sky-500">Tailwind CSS 4</span>
       </p>
-      <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">
-        SCV Modern &mdash; Simple Crud Vue v2.0
+      <p class="mt-1 text-xs text-surface-300 dark:text-surface-600">
+        SCV &mdash; Simple Crud Vue v3.0
       </p>
     </div>
   </footer>

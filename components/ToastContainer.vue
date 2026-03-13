@@ -1,15 +1,15 @@
 <template>
-  <div class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-sm">
+  <div class="pointer-events-none fixed bottom-6 right-6 z-50 flex flex-col gap-2.5">
     <TransitionGroup name="toast">
       <div
-        v-for="toast in toasts"
-        :key="toast.id"
-        :class="toastClasses(toast.type)"
-        class="flex items-center gap-3 px-4 py-3 rounded-xl shadow-2xl animate-slide-up cursor-pointer"
-        @click="dismiss(toast.id)"
+        v-for="t in toasts"
+        :key="t.id"
+        class="pointer-events-auto flex min-w-[280px] max-w-sm cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 shadow-xl backdrop-blur-xl"
+        :class="styles(t.type)"
+        @click="dismiss(t.id)"
       >
-        <Icon :name="toastIcon(toast.type)" class="w-5 h-5 flex-shrink-0" />
-        <span class="text-sm font-medium">{{ toast.message }}</span>
+        <Icon :name="icons(t.type)" class="h-5 w-5 shrink-0" />
+        <span class="text-sm font-medium">{{ t.message }}</span>
       </div>
     </TransitionGroup>
   </div>
@@ -20,38 +20,37 @@ import type { ToastType } from '~/types'
 
 const { toasts, dismiss } = useToast()
 
-function toastClasses(type: ToastType) {
-  const map: Record<ToastType, string> = {
-    success: 'bg-emerald-600 text-white',
-    error: 'bg-red-600 text-white',
-    info: 'bg-primary-600 text-white',
-    warning: 'bg-amber-500 text-white',
+function styles(type: ToastType): string {
+  const m: Record<ToastType, string> = {
+    success: 'border-emerald-200 bg-emerald-50/90 text-emerald-800 dark:border-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-200',
+    error:   'border-rose-200 bg-rose-50/90 text-rose-800 dark:border-rose-800 dark:bg-rose-950/80 dark:text-rose-200',
+    info:    'border-accent-200 bg-accent-50/90 text-accent-800 dark:border-accent-800 dark:bg-accent-950/80 dark:text-accent-200',
+    warning: 'border-amber-200 bg-amber-50/90 text-amber-800 dark:border-amber-800 dark:bg-amber-950/80 dark:text-amber-200',
   }
-  return map[type]
+  return m[type]
 }
 
-function toastIcon(type: ToastType) {
-  const map: Record<ToastType, string> = {
+function icons(type: ToastType): string {
+  const m: Record<ToastType, string> = {
     success: 'ph:check-circle-fill',
     error: 'ph:x-circle-fill',
     info: 'ph:info-fill',
     warning: 'ph:warning-fill',
   }
-  return map[type]
+  return m[type]
 }
 </script>
 
 <style scoped>
-.toast-enter-active,
-.toast-leave-active {
-  transition: all 0.3s ease;
+.toast-enter-active, .toast-leave-active {
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .toast-enter-from {
   opacity: 0;
-  transform: translateX(100px);
+  transform: translateX(100%) scale(0.9);
 }
 .toast-leave-to {
   opacity: 0;
-  transform: translateX(100px);
+  transform: translateX(40px) scale(0.95);
 }
 </style>
