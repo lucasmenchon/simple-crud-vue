@@ -1,9 +1,9 @@
 # SCV - Simple Crud Vue
 
 Modern Contacts CRUD built with:
-- **Nuxt 3** (v3.21+) / **Vue 3** (Composition API + `<script setup>`)
-- **Tailwind CSS** with custom design system
-- **Pinia** for state management
+- **Nuxt 4** (v4.4) / **Vue 3** (Composition API + `<script setup>`)
+- **Tailwind CSS 4** with custom design system
+- **Pinia 3** for state management
 - **TypeScript** / **Dark mode** / **localStorage** persistence
 
 > Looking for the original Vue 2 version? Check the [`feat/v1`](../../tree/feat/v1) branch.

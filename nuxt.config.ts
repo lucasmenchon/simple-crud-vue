@@ -17,6 +17,7 @@ export default defineNuxtConfig({
   },
 
   app: {
+    baseURL: '/simple-crud-vue/',
     head: {
       title: 'SCV — Simple Crud Vue',
       htmlAttrs: { lang: 'en' },
