@@ -166,7 +166,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ContactFormData } from '~/types'
+import type { ContactFormData } from '~~/shared/types'
 
 const store = useContactsStore()
 const toast = useToast()

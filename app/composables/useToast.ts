@@ -1,4 +1,4 @@
-import type { Toast, ToastType } from '~/types'
+import type { Toast, ToastType } from '~~/shared/types'
 
 const toasts = ref<Toast[]>([])
 

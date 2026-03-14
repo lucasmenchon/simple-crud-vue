@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { Contact, ContactFormData, SortConfig, SortField } from '~/types'
+import type { Contact, ContactFormData, SortConfig, SortField } from '~~/shared/types'
 
 const STORAGE_KEY = 'scv-contacts-v3'
 

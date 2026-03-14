@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ToastType } from '~/types'
+import type { ToastType } from '~~/shared/types'
 
 const { toasts, dismiss } = useToast()
 

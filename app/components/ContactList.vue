@@ -305,7 +305,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Contact, SortField, ViewMode } from '~/types'
+import type { Contact, SortField, ViewMode } from '~~/shared/types'
 
 const store = useContactsStore()
 const toast = useToast()
