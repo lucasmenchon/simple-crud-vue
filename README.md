@@ -26,8 +26,14 @@ Modern Contacts CRUD built with:
 
 ## Getting Started
 ```bash
-npm install
-npm run dev      # Development server
-npm run build    # Production build
-npm run preview  # Preview production build
+bun install
+bun run dev      # Development server
+bun run build    # Production build
+bun run preview  # Preview production build
 ```
+
+## Documentation
+
+- Product overview: `docs/overview.md`
+- Technical architecture: `docs/architecture.md`
+- Migration prompt (optional Nuxt -> Vite + React): `docs/migration-prompt.md`

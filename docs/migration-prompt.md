@@ -1,0 +1,3 @@
+# Prompt Ideal - simple-crud-vue
+
+"Migrate this contacts CRUD app from Nuxt/Vue to Vite + React + TypeScript + Tailwind + shadcn/ui while preserving feature parity: dashboard metrics, search, filters, sorting, favorites, import/export JSON, dark mode, table/card views, and responsive layout. Keep project-specific color identity and visual language; do not copy external palettes. Apply smooth but functional motion (staggered reveal, view transitions, interactive states). Deliver two pull requests: docs first, migration second. Include Vercel deployment adjustments if present and complete QA checklist for all CRUD and filter flows."
