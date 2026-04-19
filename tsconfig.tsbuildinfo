@@ -1,0 +1,1 @@
+{"root":["./nuxt.config.ts","./app/composables/usetoast.ts","./app/stores/contacts.ts","./composables/usetoast.ts","./shared/types/index.ts","./stores/contacts.ts","./types/index.ts"],"errors":true,"version":"5.9.3"}

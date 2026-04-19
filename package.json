@@ -1,28 +1,39 @@
 {
-  "name": "simple-crud-vue",
-  "version": "3.0.0",
-  "private": true,
-  "description": "Modern Contacts CRUD — Nuxt 4, Vue 3, Tailwind CSS 4, Pinia",
-  "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
-  },
-  "dependencies": {
-    "nuxt": "^4.4.2",
-    "vue": "^3.5.0",
-    "vue-router": "^4.5.0",
-    "pinia": "^3.0.0",
-    "@pinia/nuxt": "^0.11.0"
-  },
-  "devDependencies": {
-    "@tailwindcss/vite": "^4.2.0",
-    "tailwindcss": "^4.2.0",
-    "@nuxtjs/color-mode": "^4.0.0",
-    "@nuxt/icon": "^2.2.0",
-    "@nuxt/fonts": "^0.14.0",
-    "typescript": "^5.8.0"
-  }
+    "name":  "simple-crud-vue",
+    "version":  "3.0.0",
+    "description":  "Modern Contacts CRUD — Nuxt 4, Vue 3, Tailwind CSS 4, Pinia",
+    "private":  true,
+    "type":  "module",
+    "scripts":  {
+                    "dev":  "vite",
+                    "build":  "tsc -b ; vite build",
+                    "preview":  "vite preview",
+                    "lint":  "eslint ."
+                },
+    "dependencies":  {
+                         "clsx":  "^2.1.1",
+                         "framer-motion":  "^11.3.19",
+                         "lucide-react":  "^0.468.0",
+                         "react":  "^18.3.1",
+                         "react-dom":  "^18.3.1",
+                         "react-router-dom":  "^6.28.0",
+                         "tailwind-merge":  "^2.5.5"
+                     },
+    "devDependencies":  {
+                            "@eslint/js":  "^9.13.0",
+                            "@types/node":  "^22.9.0",
+                            "@types/react":  "^18.3.12",
+                            "@types/react-dom":  "^18.3.1",
+                            "@vitejs/plugin-react":  "^4.3.3",
+                            "autoprefixer":  "^10.4.20",
+                            "eslint":  "^9.13.0",
+                            "eslint-plugin-react-hooks":  "^5.0.0",
+                            "eslint-plugin-react-refresh":  "^0.4.14",
+                            "globals":  "^15.11.0",
+                            "postcss":  "^8.4.49",
+                            "tailwindcss":  "^3.4.15",
+                            "typescript":  "^5.6.3",
+                            "typescript-eslint":  "^8.11.0",
+                            "vite":  "^5.4.10"
+                        }
 }

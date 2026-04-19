@@ -31,3 +31,18 @@ npm run dev      # Development server
 npm run build    # Production build
 npm run preview  # Preview production build
 ```
+
+## Migration status (Nuxt to Vite + React)
+
+This branch introduces a migration foundation (not full parity):
+- Vite + React + TypeScript app shell
+- Tailwind + animation primitives + router placeholders
+- SPA deployment rewrite (`vercel.json`)
+
+### Bun commands
+
+```bash
+bun install
+bun run dev
+bun run build
+```
